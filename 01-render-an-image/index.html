@@ -1,5 +1,5 @@
 <body>
-  <div id="target"></div>
+  <div id="targetDomElement"></div>
 
   <!-- Dependencies -->
   <script src="https://unpkg.com/cornerstone-core@2.3.0/dist/cornerstone.js"></script>
@@ -10,12 +10,13 @@
     cornerstoneWebImageLoader.external.cornerstone = cornerstone;
     // cornerstoneWebImageLoader.configure();
 
-    const url = "https://raw.githubusercontent.com/ohiftraining/beginners-guide-to-cornerstone-js/master/.github/example.png";
-    const element = document.getElementById('dicomImage');
-        
-    cornerstone.enable(element);
-    cornerstone.loadImage(url).then(function(image) {
-      cornerstone.displayImage(element, image);
+    const url =
+      "https://raw.githubusercontent.com/ohiftraining/beginners-guide-to-cornerstone-js/master/.github/example.png";
+    const targetDomElement = document.getElementById("targetDomElement");
+
+    cornerstone.enable(targetDomElement);
+    cornerstone.loadImage(url).then(function (image) {
+      cornerstone.displayImage(targetDomElement, image);
     });
-</script>
+  </script>
 </body>
