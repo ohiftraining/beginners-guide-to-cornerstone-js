@@ -57,7 +57,7 @@
     function loadImageFn(imageId) {
       return {
         promise: new Promise((resolve, reject) => {
-          resolve(createImage);
+          resolve(createImage(imageId));
         }),
         cancelFn: () => {},
       };
