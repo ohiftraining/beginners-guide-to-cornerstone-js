@@ -54,7 +54,7 @@
       };
     }
 
-    function loadImage(imageId) {
+    function loadImageFn(imageId) {
       return {
         promise: new Promise((resolve, reject) => {
           resolve(createImage);
@@ -67,8 +67,12 @@
     const targetDomElement = document.getElementById("targetDomElement");
     cornerstone.enable(targetDomElement);
 
+    // Register Image Loader
+    const exampleScheme = "example-scheme";
+    cornerstone.registerImageLoader(exampleScheme, loadImageFn);
+
     // Load and display image
-    const url = `${window.location.href}example.png`;
+    const url = `${exampleScheme}:unique-image-identifier`;
     cornerstone.loadImage(url).then(function (image) {
       cornerstone.displayImage(targetDomElement, image);
     });
