@@ -15,11 +15,15 @@
       const pixelValueRange = maxPixelValue - minPixelValue;
       const pixelData = new Uint8ClampedArray(rows * columns * 4);
 
-      for (let row = 0; row < 512; row++) {
-        for (let col = 0; col < 512; col++) {
-          let offset = row * 512;
-          image[offset + col] = Math.round(col / 2);
-        }
+      //   for (let row = 0; row < 512; row++) {
+      //     for (let col = 0; col < 512; col++) {
+      //       let offset = row * 512;
+      //       image[offset + col] = Math.round(col / 2);
+      //     }
+      //   }
+
+      for (let i = 0; i < pixelData.length; i++) {
+        pixelData[i] = 127;
       }
 
       return {
