@@ -7,14 +7,15 @@
   <script src="https://unpkg.com/cornerstone-web-image-loader@2.1.1/dist/cornerstoneWebImageLoader.min.js"></script>
 
   <script>
+    // Set externals
     cornerstoneWebImageLoader.external.cornerstone = cornerstone;
-    // cornerstoneWebImageLoader.configure();
 
-    const url =
-      "https://raw.githubusercontent.com/ohiftraining/beginners-guide-to-cornerstone-js/master/.github/example.png";
+    // Enable cornerstone element
     const targetDomElement = document.getElementById("targetDomElement");
-
     cornerstone.enable(targetDomElement);
+
+    // Load and display image
+    const url = `${window.location.href}example.png`;
     cornerstone.loadImage(url).then(function (image) {
       cornerstone.displayImage(targetDomElement, image);
     });
