@@ -1,0 +1,105 @@
+<body>
+  <div id="targetDomElement"></div>
+
+  <!-- Dependencies -->
+  <script src="https://unpkg.com/cornerstone-core@2.3.0/dist/cornerstone.js"></script>
+  <script src="https://unpkg.com/cornerstone-math@0.1.8/dist/cornerstoneMath.min.js"></script>
+
+  <script>
+    // https://github.com/cornerstonejs/cornerstone/blob/master/example/imageloader/index.html
+    function createImage(imageId) {
+      const rows = 512;
+      const columns = 512;
+      const minPixelValue = 0;
+      const maxPixelValue = 255;
+      const pixelValueRange = maxPixelValue - minPixelValue;
+      const pixelData = new Uint8ClampedArray(rows * columns);
+
+      //   for (let row = 0; row < 512; row++) {
+      //     for (let col = 0; col < 512; col++) {
+      //       let offset = row * 512;
+      //       image[offset + col] = Math.round(col / 2);
+      //     }
+      //   }
+
+      for (let i = 0; i < pixelData.length; i++) {
+        pixelData[i] = 127;
+      }
+
+      //   function getCanvas() {
+      //     const canvas = document.createElement("canvas");
+
+      //     canvas.height = image.naturalHeight;
+      //     canvas.width = image.naturalWidth;
+
+      //     const context = canvas.getContext("2d");
+
+      //     context.drawImage(image, 0, 0);
+      //     const imageData = context.getImageData(
+      //       0,
+      //       0,
+      //       image.naturalWidth,
+      //       image.naturalHeight
+      //     );
+
+      //     return imageData;
+      //   }
+
+      return {
+        imageId,
+        minPixelValue,
+        maxPixelValue,
+        slope: 1,
+        intercept: 0,
+        windowCenter: pixelValueRange / 2,
+        windowWidth: pixelValueRange,
+        // Requires `getImage() => {}` be implemented
+        // render: cornerstone.renderWebImage,
+        render: cornerstone.renderGrayscaleImage,
+        // raw pixel values
+        // in canvas, this is UInt8ClampedArray [rgba]
+        getPixelData: () => pixelData,
+        // Only used here:
+        // https://github.com/cornerstonejs/cornerstone/blob/a1f0caf7e745bda4fd2b2687adc8746546a9a7ca/src/rendering/renderColorImage.js#L57-L66
+        // getCanvas: undefined,
+        // Only for WebImages...
+        // Allows to be drawn directly if no transformations applied...
+        // Else fallback to the `renderColorImage` renderer
+        // getImage: () => image,
+        rows,
+        columns,
+        height: rows,
+        width: columns,
+        // falseColorMap, saveLastRendered?, webgl/renderer
+        color: false,
+        // falseColorMap; renderColorImage; multi-layer images?
+        rgba: false,
+        invert: false,
+        sizeInBytes: rows * columns, // r,g,b,a per pixel
+      };
+    }
+
+    function loadImageFn(imageId) {
+      return {
+        promise: new Promise((resolve, reject) => {
+          resolve(createImage(imageId));
+        }),
+        cancelFn: () => {},
+      };
+    }
+
+    // Enable cornerstone element
+    const targetDomElement = document.getElementById("targetDomElement");
+    cornerstone.enable(targetDomElement);
+
+    // Register Image Loader
+    const exampleScheme = "example-scheme";
+    cornerstone.registerImageLoader(exampleScheme, loadImageFn);
+
+    // Load and display image
+    const url = `${exampleScheme}:unique-image-identifier`;
+    cornerstone.loadImage(url).then(function (image) {
+      cornerstone.displayImage(targetDomElement, image);
+    });
+  </script>
+</body>

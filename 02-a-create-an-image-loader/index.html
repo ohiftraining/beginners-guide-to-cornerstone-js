@@ -3,7 +3,6 @@
 
   <!-- Dependencies -->
   <script src="https://unpkg.com/cornerstone-core@2.3.0/dist/cornerstone.js"></script>
-  <script src="https://unpkg.com/cornerstone-math@0.1.8/dist/cornerstoneMath.min.js"></script>
 
   <script>
     // https://github.com/cornerstonejs/cornerstone/blob/master/example/imageloader/index.html
@@ -13,48 +12,37 @@
       const minPixelValue = 0;
       const maxPixelValue = 255;
       const pixelValueRange = maxPixelValue - minPixelValue;
-      const pixelData = new Uint8ClampedArray(rows * columns * 4);
+      const pixelData = new Uint8ClampedArray(rows * columns);
 
-      //   for (let row = 0; row < 512; row++) {
-      //     for (let col = 0; col < 512; col++) {
-      //       let offset = row * 512;
-      //       image[offset + col] = Math.round(col / 2);
-      //     }
-      //   }
+      // "example-scheme:180"
+      const [scheme, uid] = imageId.split(":");
 
       for (let i = 0; i < pixelData.length; i++) {
-        pixelData[i] = 127;
+        pixelData[i] = uid;
       }
+
+      // VOI - Value of Interest
+      // LUT - Lookup Table
 
       return {
         imageId,
+
+        // Generate LUT
         minPixelValue,
         maxPixelValue,
-        slope: 1,
-        intercept: 0,
+        slope: 1, // Rescale slope (0028, 1053), linear transform
+        intercept: 0, // Rescale Intercept (0028, 1052)
         windowCenter: pixelValueRange / 2,
         windowWidth: pixelValueRange,
-        // Requires `getImage() => {}` be implemented
-        // render: cornerstone.renderWebImage,
-        render: cornerstone.renderColorImage,
+        //
+        render: cornerstone.renderGrayscaleImage,
         // raw pixel values
-        // in canvas, this is UInt8ClampedArray [rgba]
         getPixelData: () => pixelData,
-        // Only used here:
-        // https://github.com/cornerstonejs/cornerstone/blob/a1f0caf7e745bda4fd2b2687adc8746546a9a7ca/src/rendering/renderColorImage.js#L57-L66
-        getCanvas,
-        // Only for WebImages...
-        // Allows to be drawn directly if no transformations applied...
-        // Else fallback to the `renderColorImage` renderer
-        // getImage: () => image,
         rows,
         columns,
         height: rows,
         width: columns,
-        color: true,
-        rgba: false,
-        invert: false,
-        sizeInBytes: rows * columns * 4, // r,g,b,a per pixel
+        sizeInBytes: rows * columns,
       };
     }
 
@@ -76,7 +64,7 @@
     cornerstone.registerImageLoader(exampleScheme, loadImageFn);
 
     // Load and display image
-    const url = `${exampleScheme}:unique-image-identifier`;
+    const url = `${exampleScheme}:127`;
     cornerstone.loadImage(url).then(function (image) {
       cornerstone.displayImage(targetDomElement, image);
     });
