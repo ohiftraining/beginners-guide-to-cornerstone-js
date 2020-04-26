@@ -1,0 +1,22 @@
+<body>
+  <div id="targetDomElement"></div>
+
+  <!-- Dependencies -->
+  <script src="https://unpkg.com/cornerstone-core"></script>
+  <script src="https://unpkg.com/cornerstone-web-image-loader"></script>
+
+  <script>
+    // Set external
+    cornerstoneWebImageLoader.external.cornerstone = cornerstone;
+
+    // Enable cornerstone element
+    const targetDomElement = document.getElementById('targetDomElement');
+    cornerstone.enable(targetDomElement);
+
+    // Load and display image
+    const imageId = 'http://localhost:3000/example.png';
+    cornerstone.loadImage(imageId).then(function (cornerstoneImage) {
+      cornerstone.displayImage(targetDomElement, cornerstoneImage);
+    });
+  </script>
+</body>
